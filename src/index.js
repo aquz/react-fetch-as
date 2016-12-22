@@ -41,7 +41,10 @@ export default class ReactFetcher extends Component {
     };
     const parseResponse = r => toJson ? r.json() : r.blob();
     const onSuccess = data => this.setState({data, loading: false});
-    const onCatch = errorData => typeof onError === 'function' ? onError(errorData) : null;;
+    const onCatch = errorData => {
+      typeof onError === 'function' ? onError(errorData) : null;
+      console.error(errorData);
+    }
 
     fetch(from)
       .then(catchErrors)
@@ -61,13 +64,13 @@ export default class ReactFetcher extends Component {
     const { children, as, parentProps, onError } = this.props;
     const { loading, data, errorData } = this.state;
     const props = {...parentProps, [as]: data};
-    const childrenIsNextLoad = children.type.prototype instanceof ReactFetcher;
+    const childrenIsReactFetcher = children.type === ReactFetcher;
 
     if (loading) {
       return this.getSpinner();
     }
 
-    if (childrenIsNextLoad) {
+    if (childrenIsReactFetcher) {
       return <Clone element={children} parentProps={props}/>
     }
 

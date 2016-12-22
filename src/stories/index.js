@@ -11,6 +11,14 @@ const PhotoAs = ({photo}) => (
 );
 
 
+const Album = ({photo, photo2}) => (
+  <div>
+    <img src={photo.thumbnailUrl}/>
+    <img src={photo2.thumbnailUrl}/>
+  </div>
+);
+
+
 storiesOf('ReactFetcher', module)
   .add('simple example', () => (
     <Fetch from="https://jsonplaceholder.typicode.com/photos/1" spinner="Loading photo...">
@@ -25,5 +33,12 @@ storiesOf('ReactFetcher', module)
   .add('on error', () => (
     <Fetch from="https://fake.domain.example" onError={() => global.alert('Fetch error')} spinner="Loading photo..." >
       <Photo/>
+    </Fetch>
+  ))
+  .add('nested', () => (
+    <Fetch from="https://jsonplaceholder.typicode.com/photos/1" as="photo" spinner="Loading photo...">
+      <Fetch from="https://jsonplaceholder.typicode.com/photos/2" as="photo2" spinner="Loading photo2...">
+        <Album/>
+      </Fetch>
     </Fetch>
   ));
