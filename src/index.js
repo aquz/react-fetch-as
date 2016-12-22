@@ -62,7 +62,7 @@ export default class ReactFetcher extends Component {
     const { children, as, parentProps, onError } = this.props;
     const { loading, data, errorData } = this.state;
     const props = {...parentProps, [as]: data};
-    const childrenIsNextLoad = children.type.prototype instanceof Load;
+    const childrenIsNextLoad = children.type.prototype instanceof ReactFetcher;
 
     if (loading) {
       return this.getSpinner();
