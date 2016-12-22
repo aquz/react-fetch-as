@@ -26,12 +26,11 @@ export default class ReactFetcher extends Component {
     this.state = {
       loading: true,
       data: null,
-      errorData: null,
     }
   }
 
   componentDidMount() {
-    const { toJson, from } = this.props;
+    const { toJson, from, onError } = this.props;
 
     const catchErrors = r => {
       if (r.ok) {
@@ -41,14 +40,14 @@ export default class ReactFetcher extends Component {
       throw Error(r.statusText);
     };
     const parseResponse = r => toJson ? r.json() : r.blob();
-    const success = data => this.setState({data, loading: false});
-    const onError = errorData => this.setState({errorData, loading: false}) && console.error(errorData);
+    const onSuccess = data => this.setState({data, loading: false});
+    const onCatch = errorData => typeof onError === 'function' ? onError(errorData) : null;;
 
     fetch(from)
       .then(catchErrors)
       .then(parseResponse)
-      .then(success)
-      .catch(onError);
+      .then(onSuccess)
+      .catch(onCatch);
   }
 
   getSpinner() {
@@ -66,15 +65,6 @@ export default class ReactFetcher extends Component {
 
     if (loading) {
       return this.getSpinner();
-    }
-
-    if (errorData) {
-      if (typeof onError === 'function') {
-        console.log(errorData)
-        return onError(errorData)
-      }
-
-      return null;
     }
 
     if (childrenIsNextLoad) {
