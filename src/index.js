@@ -39,14 +39,17 @@ export default class ReactFetcher extends Component {
 
       throw Error(r.statusText);
     };
-    const parseResponse = r => toJson ? r.json() : r.blob();
+    const parseResponse = r => (toJson ? r.json() : r.blob());
     const onSuccess = data => this.setState({ data, loading: false });
     const onCatch = (errorData) => {
-      typeof onError === 'function' ? onError(errorData) : null;
+      if (typeof onError === 'function') {
+        onError(errorData);
+      }
+
       console.error(errorData);
     };
 
-    fetch(from)
+    global.fetch(from)
       .then(catchErrors)
       .then(parseResponse)
       .then(onSuccess)
@@ -61,8 +64,8 @@ export default class ReactFetcher extends Component {
   }
 
   render() {
-    const { children, as, parentProps, onError } = this.props;
-    const { loading, data, errorData } = this.state;
+    const { children, as, parentProps } = this.props;
+    const { loading, data } = this.state;
     const props = { ...parentProps, [as]: data };
     const childrenIsReactFetcher = children.type === ReactFetcher;
 
