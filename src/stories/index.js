@@ -18,6 +18,12 @@ const Album = ({ photo, photo2 }) => (
   </div>
 );
 
+const Result = ({data}) => (
+  <pre>
+    {JSON.stringify(data)}
+  </pre>
+);
+
 
 storiesOf('ReactFetcher', module)
   .add('simple example', () => (
@@ -40,5 +46,10 @@ storiesOf('ReactFetcher', module)
       <Fetch from="https://jsonplaceholder.typicode.com/photos/2" as="photo2" spinner="Loading photo2...">
         <Album />
       </Fetch>
+    </Fetch>
+  ))
+  .add('props "options", POST request', () => (
+    <Fetch from="https://jsonplaceholder.typicode.com/posts" options={{method: 'POST'}} spinner="POST request...">
+      <Result/>
     </Fetch>
   ));

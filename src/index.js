@@ -9,6 +9,7 @@ export default class ReactFetcher extends Component {
     from: PropTypes.string.isRequired,
     as: PropTypes.string,
     parentProps: PropTypes.object,
+    options: PropTypes.object,
     toJson: PropTypes.bool,
   };
 
@@ -17,6 +18,7 @@ export default class ReactFetcher extends Component {
     as: 'data',
     spinner: null,
     parentProps: {},
+    options: {},
     toJson: true,
   };
 
@@ -30,7 +32,7 @@ export default class ReactFetcher extends Component {
   }
 
   componentDidMount() {
-    const { toJson, from, onError } = this.props;
+    const { toJson, from, onError, options } = this.props;
 
     const catchErrors = (r) => {
       if (r.ok) {
@@ -49,7 +51,7 @@ export default class ReactFetcher extends Component {
       console.error(errorData);
     };
 
-    global.fetch(from)
+    this.fetch = global.fetch(from, options)
       .then(catchErrors)
       .then(parseResponse)
       .then(onSuccess)
