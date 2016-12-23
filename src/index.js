@@ -6,6 +6,7 @@ export default class ReactFetcher extends Component {
     children: PropTypes.node,
     spinner: PropTypes.node,
     onError: PropTypes.func,
+    onSuccess: PropTypes.func,
     from: PropTypes.string.isRequired,
     as: PropTypes.string,
     parentProps: PropTypes.object,
@@ -32,7 +33,7 @@ export default class ReactFetcher extends Component {
   }
 
   componentDidMount() {
-    const { toJson, from, onError, options } = this.props;
+    const { toJson, from, onError, onSuccess: onSuccessCb, options } = this.props;
 
     const catchErrors = (r) => {
       if (r.ok) {
@@ -42,7 +43,13 @@ export default class ReactFetcher extends Component {
       throw Error(r.statusText);
     };
     const parseResponse = r => (toJson ? r.json() : r.blob());
-    const onSuccess = data => this.setState({ data, loading: false });
+    const onSuccess = (data) => {
+      this.setState({ data, loading: false });
+
+      if (typeof onSuccessCb === 'function') {
+        onSuccessCb(data);
+      }
+    };
     const onCatch = (errorData) => {
       if (typeof onError === 'function') {
         onError(errorData);

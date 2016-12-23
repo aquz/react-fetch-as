@@ -1,28 +1,28 @@
 import React from 'react';
-import { shallow, mount } from 'enzyme';
-import Button from '../index';
+import { mount } from 'enzyme';
 import { expect } from 'chai';
-import sinon from 'sinon';
+import fetchMock from 'fetch-mock';
+import Fetch from '../index';
+
 const { describe, it } = global;
 
-describe('Button', () => {
-  it('should show the given text', () => {
-    const text = 'The Text';
-    const wrapper = shallow(<Button>{text}</Button>);
-    expect(wrapper.text()).to.be.equal(text);
-  });
+fetchMock.get('*', {text: 'Fetcher test'});
 
-  it('should handle the click event', () => {
-    const clickMe = sinon.stub();
-    // Here we do a JSDOM render. So, that's why we need to
-    // wrap this with a div.
+const Test = ({data}) => (
+  <div>aaaa: {data.text}</div>
+);
+
+describe('<Fetch/>', () => {
+  it('child should render text', (done) => {
     const wrapper = mount(
-      <div>
-        <Button onClick={clickMe}>ClickMe</Button>
-      </div>
+      <Fetch from="http://example.org" onSuccess={onSuccess}>
+        <Test/>
+      </Fetch>
     );
 
-    wrapper.find('button').simulate('click');
-    expect(clickMe.callCount).to.be.equal(1);
+    function onSuccess() {
+      expect(wrapper.find('Test').text()).to.contain('Fetcher test');
+      done();
+    }
   });
 });
