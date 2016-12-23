@@ -1,10 +1,10 @@
 {
   "name": "react-fetcher",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React Fetcher Component",
   "repository": {
     "type": "git",
-    "url": "https://github.com/you/repo.git"
+    "url": "https://github.com/aquz/react-fetcher"
   },
   "license": "MIT",
   "scripts": {
