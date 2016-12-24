@@ -21,3 +21,21 @@ class FetcherExample extends Component {
   }
 }
 ```
+
+You can nested `<Fetch/>` components. `<Slider/>` receive "photos" and "images" prop.
+```javascript
+import React, { Component } from 'react';
+import Fetch from 'react-fetch-as';
+
+class NestedExample extends Component {
+  render() {
+    return (
+      <Fetch from="http://example.org/photos" as="photos">
+        <Fetch from="http://example.org/images" as="images">
+          <Slider/>
+        </Fetch>
+      </Fetch>
+    );
+  }
+}
+```
