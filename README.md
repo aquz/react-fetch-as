@@ -39,3 +39,15 @@ class NestedExample extends Component {
   }
 }
 ```
+
+## Props
+
+Name | Description | Is required | Default
+------------ | ------------- | ------------- | -------------
+from | URL of the resource you want to fetch. | yes | -
+as | Name of the prop, which will be passed to the children component. | no | data
+options | Fetch options (https://developer.mozilla.org/en-US/docs/Web/API/GlobalFetch/fetch#Parameters) |  no | `{}`
+toJson | If `true` response will be parsed to object.  | no | `true`
+spinner | React component or string. Will be displayed while loading. | no | `null`
+onError | Callback on catch error. | no | -
+onSuccess | Callback on success. | no | -
